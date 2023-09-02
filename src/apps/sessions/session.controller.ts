@@ -9,7 +9,6 @@ export default {
 			const paths: string[] = []
 			if(req.files instanceof Array){
 				for(const file of req.files) {
-					console.log(file)
 					paths.push(`${file.filename}`)
 				}
 			}
@@ -35,7 +34,6 @@ export default {
 			const paths: string[] = []
 			if(req.files instanceof Array) {
 				for(const file of req.files){
-					console.log(file)
 					paths.push(file.filename)
 				}
 			}
