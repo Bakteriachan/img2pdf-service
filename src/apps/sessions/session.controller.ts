@@ -9,7 +9,8 @@ export default {
 			const paths: string[] = []
 			if(req.files instanceof Array){
 				for(const file of req.files) {
-					paths.push(`${v4()}-${file.originalname}`)
+					console.log(file)
+					paths.push(`${file.filename}`)
 				}
 			}
 			const session = await service.create({
@@ -34,12 +35,21 @@ export default {
 			const paths: string[] = []
 			if(req.files instanceof Array) {
 				for(const file of req.files){
-					paths.push(`${v4()}-${file.originalname}`)
+					console.log(file)
+					paths.push(file.filename)
 				}
 			}
 			const session = await service.appendFiles(req.params.sessionId, paths)
 			res.status(200).send(session)
 		} catch(e) { 
+			next(e)
+		}
+	},
+	getSessionFile: async (req: Request, res: Response, next: NextFunction) => {
+		try {
+			const filepath = await service.getSessionFilePath(req.params.sessionId, req.params.filename)
+			res.sendFile(filepath)
+		} catch(e) {
 			next(e)
 		}
 	}

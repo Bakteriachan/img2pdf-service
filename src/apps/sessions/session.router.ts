@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
 		cb(null, destination)
 	},
 	filename: (req: Request, file: Express.Multer.File, cb: CallbackType): void => {
-		const filename = v4()
+		const filename = `${v4()}-${file.originalname}`
 		cb(null, `${filename}`)
 	}
 })
@@ -31,5 +31,7 @@ app.route('/')
 app.route('/:sessionId')
 	.get(controller.getBySessionId)
 	.put(upload.array('files'), controller.appendFiles)
+
+app.get('/:sessionId/file/:filename', controller.getSessionFile)
 
 export default app

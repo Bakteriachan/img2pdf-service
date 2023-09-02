@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { ISession, Session } from './session.schema'
-import { SessionNotFoundException } from './session.exception'
+import { SessionNotFoundException, FileNotFoundInSession } from './session.exception'
+import config from '../../config'
 
 
 export default {
@@ -20,5 +21,11 @@ export default {
 		Session.updateOne({ sessionId }, { $push: { files: { $each: paths } }}).exec()
 		session.files.push(...paths)
 		return session
+	},
+	getSessionFilePath: async (sessionId: string, filename: string) => {
+		const session = await Session.findOne({ sessionId }).exec()
+		if(!session) throw new SessionNotFoundException(sessionId)
+		if(!session.files.includes(filename)) throw new FileNotFoundInSession(sessionId, filename)
+		return `${config.DESTINATION_PATH}/${filename}`
 	}
 }
