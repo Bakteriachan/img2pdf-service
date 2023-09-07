@@ -9,11 +9,15 @@ export default {
 			const paths: string[] = []
 			if(req.files instanceof Array){
 				for(const file of req.files) {
-					paths.push(`${file.filename}`)
+					paths.push(file.filename)
 				}
 			}
 			const session = await service.create({
 				sessionId: v4(),
+                origin: req.body.origin,
+                sessionPayload: {
+                    telegramUserId: req.body.userId,
+                },
 				files: paths,
 			})
 			res.status(200).send(session)

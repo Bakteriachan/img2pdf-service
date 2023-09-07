@@ -2,7 +2,7 @@ import Express from 'express'
 import { create_database } from './database'
 import sessionRouter from './apps/sessions/session.router'
 
-create_database().catch(console.error).finally(() => console.log('DATABASE CONNECTED'))
+create_database().then(() => console.log('DATABASE CONNECTED')).catch(console.error)
 
 const app = Express()
 
